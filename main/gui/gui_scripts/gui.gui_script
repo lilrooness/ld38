@@ -1,0 +1,87 @@
+State = require "main.modules.scores"
+Flies = require "main.modules.flies"
+Repellent = require "main.modules.repellent"
+
+function init(self)
+-- 	satisfaction bar
+	self.satisfactionBar = gui.get_node("satisfaction_bar")
+	self.satisfactionMeter = gui.get_node("satisfaction")
+	self.satisfactionMaxWidth = gui.get_scale(self.satisfactionBar).x
+	
+-- 	flies bar
+	self.fliesBar = gui.get_node("flies_bar")
+	self.fliesMeter = gui.get_node("flies")
+	self.fliesMaxWidth = gui.get_scale(self.fliesBar).x
+
+-- 	tea bar
+	self.teaBar = gui.get_node("tea_bar")
+	self.teaMeter = gui.get_node("tea")
+	self.teaMaxWidth = gui.get_scale(self.teaBar).x
+	
+-- 	repellent bar
+	self.repellentBar = gui.get_node("repellant_bar")
+	self.repellentMeter = gui.get_node("repellant")
+	self.repellentMaxWidth = gui.get_scale(self.repellentBar).x
+	
+-- 	perfection notification
+	self.perfectionNode = gui.get_node("perfection")
+	gui.set_enabled(self.perfectionNode, false)
+	self.perfectionMessage = gui.get_node("perfectionText")
+
+end
+
+function final(self)
+    -- Add finalization code here
+    -- Remove this function if not needed
+end
+
+function update(self, dt)
+	-- update statisfaction meter
+	local currentSatisfactionScale= gui.get_scale(self.satisfactionMeter)
+	local newSatisfactionWidth = (self.satisfactionMaxWidth / 100) * State.get_satisfaction()
+	
+	currentSatisfactionScale.x = newSatisfactionWidth
+	gui.set_scale(self.satisfactionMeter, currentSatisfactionScale)
+	
+	-- update repellent meter
+	local currentRepellentScale = gui.get_scale(self.repellentMeter)
+	local newRepellentWidth = (self.repellentMaxWidth / 100) * Repellent.get_repellent()
+	
+	currentRepellentScale.x = newRepellentWidth
+	gui.set_scale(self.repellentMeter, currentRepellentScale)
+	
+	-- update flies meter
+	local currentFliesScale = gui.get_scale(self.fliesMeter)
+	local newFliesWidth = (self.fliesMaxWidth / 100) * Flies.flies * 10
+	
+	currentFliesScale.x = newFliesWidth
+	gui.set_scale(self.fliesMeter, currentFliesScale)
+	
+	-- update tea meter
+	local currentTeaScale = gui.get_scale(self.teaMeter)
+	local newTeaWidth = (self.teaMaxWidth / 100) * State.get_tea()
+	
+	currentTeaScale.x = newTeaWidth
+	gui.set_scale(self.teaMeter, currentTeaScale)
+	
+	if State.get_satisfaction() == 100 then
+		gui.set_enabled(self.perfectionNode, true)
+	end
+	
+	
+end
+
+function on_message(self, message_id, message, sender)
+    -- Add message-handling code here
+    -- Remove this function if not needed
+end
+
+function on_input(self, action_id, action)
+    -- Add input-handling code here
+    -- Remove this function if not needed
+end
+
+function on_reload(self)
+    -- Add input-handling code here
+    -- Remove this function if not needed
+end

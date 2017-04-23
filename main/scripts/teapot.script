@@ -1,0 +1,49 @@
+State = require "main.modules.scores"
+
+function init(self)
+	msg.post(".", "acquire_input_focus")
+	self.mouseover = false
+	self.clickable = true
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	-- Add update code here
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("trigger_response") then
+		self.mouseover = message.enter
+	end
+	
+	if message_id == hash("timer_complete") then
+		self.clickable = true
+	end
+	
+end
+
+function on_input(self, action_id, action)
+	if action_id == hash("click") and self.mouseover and self.clickable then
+		pour_tea(self)
+	end
+	
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Remove this function if not needed
+end
+
+function pour_tea(self)
+	msg.post("#pour", "play_sound")
+	local timerPosition = go.get_position()
+	timerPosition.z = 1
+	factory.create("#factory", timerPosition, nil, {owner = go.get_id(), speed = 1}, 0.2)
+	State.increment_tea(100)
+	self.clickable = false
+end

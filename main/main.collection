@@ -1,0 +1,22 @@
+name: "main"
+collection_instances {
+  id: "gameworld"
+  collection: "/main/gameworld.collection"
+  position {
+    x: 185.81757
+    y: 516.7586
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 0.5
+    y: 0.5
+    z: 1.0
+  }
+}
+scale_along_z: 0

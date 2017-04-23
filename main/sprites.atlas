@@ -1,0 +1,51 @@
+images {
+  image: "/main/images/burner.png"
+}
+images {
+  image: "/main/images/lamp_off.png"
+}
+images {
+  image: "/main/images/lamp_on.png"
+}
+images {
+  image: "/builtins/graphics/particle_blob.png"
+}
+images {
+  image: "/main/images/repellant_box.png"
+}
+images {
+  image: "/main/images/switch_off.png"
+}
+images {
+  image: "/main/images/switch_on.png"
+}
+images {
+  image: "/main/images/table.png"
+}
+images {
+  image: "/main/images/teacup.png"
+}
+images {
+  image: "/main/images/teapot.png"
+}
+images {
+  image: "/main/images/fly.png"
+}
+images {
+  image: "/main/images/background.png"
+}
+images {
+  image: "/main/images/long_bar.png"
+}
+images {
+  image: "/main/images/fly_icon.png"
+}
+images {
+  image: "/main/images/teabag.png"
+}
+images {
+  image: "/main/images/that_armour.png"
+}
+margin: 0
+extrude_borders: 0
+inner_padding: 0

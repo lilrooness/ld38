@@ -1,0 +1,76 @@
+Lamps = require "main.modules.lamps"
+Flies = require "main.modules.flies"
+Repellent = require "main.modules.repellent"
+
+function init(self)
+    self.speed = 1
+    self.acc = vmath.vector3()
+    self.vel = vmath.vector3()
+    
+--     keep track of how many flies there are
+    Flies.flies = Flies.flies + 1
+    
+end
+
+function final(self)
+    Flies.flies = Flies.flies - 1
+end
+
+function update(self, dt)
+	-- apply random direction
+	closest_pos = Lamps.lamps[get_closest_lamp(self)]
+	apply_force(self, vmath.normalize(closest_pos - go.get_position()))
+	apply_force(self, vmath.vector3((math.random() - 0.5) * 10, (math.random() - 0.5) * 10, 0))
+	apply_force(self, self.vel * -0.1)
+	self.vel = self.vel + self.acc
+	self.acc = vmath.vector3()
+	local pos = go.get_position() + self.vel
+	pos.z = 0
+	go.set_position(pos)
+	
+	if Repellent.boosted then
+		if math.random() * 100 > 90 then
+			go.delete()
+		end
+	end
+	
+	if not Lamps.is_lamp_on(Lamps.lampStates) then
+		if math.random() * 100 > 95 then
+			go.delete()
+		end
+	end
+	
+	
+end
+
+function on_message(self, message_id, message, sender)
+	
+end
+
+function on_input(self, action_id, action)
+	
+end
+
+function on_reload(self)
+	
+end
+
+function apply_force(self, force)
+	self.acc = self.acc + force
+end
+function get_closest_lamp(self)
+	local closest_dist = -1
+	local closest_lamp_id = 0
+	for id, pos in pairs(Lamps.lamps) do
+		local dist = vmath.length_sqr(go.get_position() - pos)
+		if closest_dist == -1 then
+			closest_lamp_id = id
+			closest_dist = dist
+		elseif dist < closest_dist then
+			closest_lamp_id = id
+			closest_dist = dist
+		end
+	end
+	
+	return closest_lamp_id
+end

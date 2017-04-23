@@ -1,0 +1,76 @@
+Lamps = require "main.modules.lamps"
+Flies = require "main.modules.flies"
+State = require "main.modules.scores"
+Repellent = require "main.modules.repellent"
+
+function init(self)
+	self.tCounter = 0
+	self.perfection = false
+	self.positiveSatisfaction = false
+	self.perfectionTimer = 0
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	self.tCounter = self.tCounter + dt
+	self.perfectionTimer = self.perfectionTimer + dt
+	
+	if self.perfectionTimer == 1.0 then
+		self.perfectionTimer = 0
+		State.timer = State.timer + 1
+	end
+	
+	if not self.perfection then
+		if self.tCounter >= 0.5 then
+			self.tCounter = 0
+			if not Lamps.is_lamp_on(Lamps.lampStates) then
+				State.increment_satisfaction(-1)
+			end
+		
+			if Flies.flies >= Flies.flyAnnoyanceLimit then
+				State.increment_satisfaction(-2)
+			end
+		
+			if Repellent.get_repellent() == 0 then
+				msg.post("flyFactory", "new_fly")
+			end
+		end
+	end
+	
+	
+
+	
+	if State.get_satisfaction() >= 100 and not self.perfection then
+		msg.post("#perfect", "play_sound")
+		self.perfection = true
+	end
+	
+	if self.positiveSatisfaction and State.get_satisfaction() < 1 then
+		msg.post("#unhappy", "play_sound")
+		self.positiveSatisfaction = false
+	elseif State.get_satisfaction() > 0 then
+		self.positiveSatisfaction = true
+	end
+	
+
+	
+end
+
+function on_message(self, message_id, message, sender)
+	-- Add message-handling code here
+	-- Remove this function if not needed
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Remove this function if not needed
+end

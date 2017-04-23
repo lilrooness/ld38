@@ -1,0 +1,70 @@
+Lamps = require "main.modules.lamps"
+State = require "main.modules.scores"
+
+function init(self)
+    msg.post(".", "acquire_input_focus")
+    self.mouseover = false
+    self.on = false
+	Lamps.lampStates[go.get_id()] = self.on
+	msg.post("#on", "disable")
+	msg.post("#off", "enable")
+    Lamps.lamps[go.get_id()] = go.get_position()
+    Lamps.lampStates[go.get_id()] = self.on
+    self.tCounter = 0
+end
+
+function final(self)
+    -- Add finalization code here
+    -- Remove this function if not needed
+end
+
+function update(self, dt)
+    self.tCounter = self.tCounter + dt
+    
+    -- maybe attract new fly
+	if self.tCounter >= 1.0 then
+		self.tCounter = 0
+		if self.on then
+			State.increment_satisfaction(1)
+		end
+		
+		if self.on then
+			msg.post("flyFactory", "new_fly")
+		end
+	end
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("trigger_response") then
+    	self.mouseover = message.enter;
+    end
+end
+
+function on_input(self, action_id, action)
+	if action_id == hash("click") and action.pressed then
+		if self.mouseover then
+			toggle_light(self, not self.on)
+		end
+	end
+end
+
+function on_reload(self)
+    -- Add reload-handling code here
+    -- Remove this function if not needed
+end
+
+function toggle_light(self, on)
+	self.on = on
+	
+	Lamps.lampStates[go.get_id()] = self.on
+	
+	if self.on then
+		msg.post("#on_sound","play_sound")
+		msg.post("#on", "enable")
+		msg.post("#off", "disable")
+	else
+		msg.post("#off_sound","play_sound")
+		msg.post("#on", "disable")
+		msg.post("#off", "enable")
+	end
+end

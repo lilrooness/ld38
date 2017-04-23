@@ -1,0 +1,47 @@
+go.property("speed",1)
+go.property("owner", hash(""))
+
+fast = 3
+slow = 1
+medium = 2
+
+function init(self)
+	self.tCounter = 0
+	if self.speed == slow then
+		self.timeLeft = 14
+	elseif self.speed == medium then
+		self.timeLeft = 7
+	elseif self.speed == fast then
+		self.timeLeft = 4.6
+	end
+	print(self.owner)
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	self.tCounter = self.tCounter + dt
+	
+	if self.tCounter >= self.timeLeft then
+		msg.post(self.owner, hash("timer_complete"), {})
+		go.delete()
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	-- Add message-handling code here
+	-- Remove this function if not needed
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Remove this function if not needed
+end
